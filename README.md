@@ -177,3 +177,45 @@ export default Ember.Route.extend({
 2. We define an action we use in the template above
 3. We get the current model using a bit of ceremony. It lets us keep this code generic.
 4. We call the `[#incrementProperty](http://emberjs.com/api/classes/Ember.Object.html#method_incrementProperty)` method  to increment to total number of clicks.
+
+
+## Reading from Inputs
+
+Chances are you're going to want to read the value of an input and pass it to a route action. Incoming code:
+```html
+{{input value=newArtist class="new-artist"}}
+<button {{action "addArtist" newArtist}} class='add-artist'>Add Artist</button>
+```
+
+That input is part of a family of helpers [Ember provides](http://emberjs.com/api/classes/Ember.Templates.helpers.html#method_input). We'll be doing more with templates in the future but let's look at this one. This creates a regular input box with a class of "new-artist". The funky part is the value property. That's not a regular HTML value property! Notice there aren't quotes. Ember is creating a variable named `newArtist`. We then pass that value, whatever it is, to the `addArtist` action as an argument.
+
+Side Note: You can pass a string to `value` but then the value won't change as you type in the input box:
+
+```html
+{{input value="Jukebox the Ghost" class="new-artist"}}
+```
+That's less fun though.
+
+
+# Running the tests
+You'll be generating a `artists` route. That will create a file in `app/templates` named `artists.hbs`.
+
+Put this in there
+```html
+{{input value=artistName class="new-artist"}}
+<button {{action "addArtist" artistName}} class='add-artist'>Add Artist</button>
+
+{{#each model as |artist|}}
+  <div class="artist">
+    {{artist.name}}
+  </div>
+{{/each}}
+```
+
+This code will create an input box, and a button to submit a new artist. The loop under it will show all of the artists you have so far.
+
+You'll be setting the model the route to be an array of Ember.Objects. The details are outlined in `tests/unit/routes/flatiron-artists-test.js`. Then you'll get the Route to work by implementing the `addArtist` action.
+
+To get started, run `ember server` then visit `http://localhost:4200/tests`
+
+**Happy Hacking**
